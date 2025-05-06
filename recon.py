@@ -128,6 +128,9 @@ def save_recon(views, pred_frame_num, save_dir, scene_id, save_all_views=False,
     sampled_idx = np.random.choice(valid_ids, n_samples, replace=False)
     sampled_pts = res_pcds[sampled_idx]
     sampled_rgbs = res_rgbs[sampled_idx]
+    # Highlight masked points in red
+    if valid_masks is not None:
+        sampled_rgbs[valid_masks] = np.array([255, 0, 0], dtype=np.uint8)
     save_ply(points=sampled_pts[:,:3], save_path=join(save_dir, save_name), colors=sampled_rgbs)
 
 
@@ -338,6 +341,14 @@ def scene_recon_pipeline(i2p_model:Image2PointsModel,
 
     scene_id = dataset.scene_names[0]
     data_views = dataset[0][:]
+    if args.mask_dir:
+      for view in data_views:
+          fname = os.path.basename(view['img_path'])
+          mask_path = os.path.join(args.mask_dir, fname)
+          mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+          mask = center_crop_and_resize(mask, crop_size, out_size)  
+          view['valid_mask'] = (mask > 0)
+                       
     num_views = len(data_views)
     
     # Pre-save the RGB images along with their corresponding masks 
@@ -613,7 +624,9 @@ def scene_recon_pipeline(i2p_model:Image2PointsModel,
                       args.save_all_views, rgb_imgs, registered_confs=per_frame_res['l2w_confs'], 
                       num_points_save=num_points_save, 
                       conf_thres_res=conf_thres_l2w, valid_masks=valid_masks)
-
+    if args.mask_dir:
+      save_recon(res_pcds, res_rgbs, scene_id + '_object', args, valid_masks=valid_masks)
+      
     if args.save_preds:
         preds_dir = join(save_dir, 'preds')
         os.makedirs(preds_dir, exist_ok=True)
