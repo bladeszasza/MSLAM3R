@@ -28,6 +28,7 @@ parser.add_argument("--l2w_weights", type=str, help="path to the weights of l2w 
 input_group = parser.add_mutually_exclusive_group(required=True)
 input_group.add_argument("--dataset", type=str, help="a string indicating the dataset")
 input_group.add_argument("--img_dir", type=str, help="directory of the input images")
+parser.add_argument('--mask_dir',    type=str, default=None, help='[optional] path to per-frame binary masks (same names as frames) for object filtering')
 parser.add_argument("--save_dir", type=str, default="results", help="directory to save the results")
 parser.add_argument("--test_name", type=str, required=True, help="name of the test")
 parser.add_argument('--save_all_views', action='store_true', help='whether to save all views respectively')
