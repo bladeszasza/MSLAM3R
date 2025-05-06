@@ -625,7 +625,11 @@ def scene_recon_pipeline(i2p_model:Image2PointsModel,
                       num_points_save=num_points_save, 
                       conf_thres_res=conf_thres_l2w, valid_masks=valid_masks)
     if args.mask_dir:
-      save_recon(res_pcds, res_rgbs, scene_id + '_object', args, valid_masks=valid_masks)
+      save_recon(input_views, num_views, save_dir, scene_id+'_object', 
+                      args.save_all_views, rgb_imgs, registered_confs=per_frame_res['l2w_confs'], 
+                      num_points_save=num_points_save, 
+                      conf_thres_res=conf_thres_l2w, valid_masks=mask_array)
+
       
     if args.save_preds:
         preds_dir = join(save_dir, 'preds')
