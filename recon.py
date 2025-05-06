@@ -346,7 +346,6 @@ def scene_recon_pipeline(i2p_model:Image2PointsModel,
           fname = os.path.basename(view['img_path'])
           mask_path = os.path.join(args.mask_dir, fname)
           mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
-          mask = center_crop_and_resize(mask, crop_size, out_size)  
           view['valid_mask'] = (mask > 0)
                        
     num_views = len(data_views)
