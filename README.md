@@ -194,6 +194,19 @@ bash ./scripts/train_l2w.sh
 > [!NOTE]
 > They are not strictly equivalent to what was used to train SLAM3R, but they should be close enough.
 
+## 🔧 Modifications
+
+This fork adds support for integrating precomputed 2D segmentation masks into the SLAM3R reconstruction pipeline.
+
+### 🔹 New Features:
+- `--mask_dir`: Optional argument to provide binary masks (one per frame) for filtering 3D points.
+- `save_recon` now optionally outputs both the full scene and object-only segmented clouds.
+
+### 🔹 Use Case:
+Fully automated pipeline for open-vocabulary instance segmentation in 3D.
+
+### 🔹 Maintainer:
+Fork maintained by [@bladeszasza](https://github.com/bladeszasza) as part of an object-centric 3D reconstruction pipeline.
 
 ## Citation
 
